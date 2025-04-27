@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Grade Predictor</title>
+  <style>
+    body {
+      font-family: Arial;
+      margin: 50px;
+    }
+    input {
+      padding: 8px;
+      margin: 10px 0;
+      width: 200px;
+    }
+    button {
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Student Grade Prediction</h2>
+  <label>Hours Studied: <input type="number" id="hours" step="any"></label><br>
+  <label>Previous Grade: <input type="number" id="prev_grade" step="any"></label><br>
+  <button onclick="predict()">Predict</button>
+
+  <h3 id="result"></h3>
+
+  <script>
+    // Insert the values from train_model.py output
+    const intercept = 33.048916993595505;
+    const coef_hours = 0.30328632;
+    const coef_prev = 0.19132681;
+
+    function predict() {
+      const hours = parseFloat(document.getElementById('hours').value);
+      const prev = parseFloat(document.getElementById('prev_grade').value);
+
+      if (isNaN(hours) || isNaN(prev)) {
+        document.getElementById('result').innerText = "Please enter valid inputs.";
+        return;
+      }
+
+      const prediction = intercept + coef_hours * hours + coef_prev * prev;
+      document.getElementById('result').innerText = `Predicted Final Grade: ${prediction.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
