@@ -1,44 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Student Grade Predictor</title>
   <style>
     body {
-      font-family: Arial;
-      margin: 50px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #e0eafc, #cfdef3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
+
+    .container {
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
     input {
-      padding: 8px;
-      margin: 10px 0;
-      width: 200px;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 16px;
     }
+
     button {
-      padding: 10px 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #result {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
     }
   </style>
 </head>
 <body>
-  <h2>Student Grade Prediction</h2>
-  <label>Hours Studied: <input type="number" id="hours" step="any"></label><br>
-  <label>Previous Grade: <input type="number" id="prev_grade" step="any"></label><br>
-  <button onclick="predict()">Predict</button>
+  <div class="container">
+    <h2>Student Grade Predictor</h2>
+    <label for="hours">Hours Studied:</label>
+    <input type="number" id="hours" step="any" placeholder="e.g. 5">
 
-  <h3 id="result"></h3>
+    <label for="prev_grade">Previous Grade:</label>
+    <input type="number" id="prev_grade" step="any" placeholder="e.g. 75">
+
+    <button onclick="predict()">Predict</button>
+
+    <h3 id="result"></h3>
+  </div>
 
   <script>
-    let intercept, coef_hours, coef_prev;
-
-    // Fetch coefficients from config.json
-    fetch('config.json')
-      .then(response => response.json())
-      .then(data => {
-        intercept = data.intercept;
-        coef_hours = data.coef_hours;
-        coef_prev = data.coef_prev;
-      })
-      .catch(error => {
-        console.error('Error fetching model config:', error);
-      });
+    // These values come from config.json output of train_model.py
+    const intercept = 33.048916993595505;
+    const coef_hours = 0.30328632;
+    const coef_prev = 0.19132681;
 
     function predict() {
       const hours = parseFloat(document.getElementById('hours').value);
@@ -49,15 +98,11 @@
         return;
       }
 
-      if (intercept === undefined) {
-        document.getElementById('result').innerText = "Model not loaded yet. Try again in a moment.";
-        return;
-      }
-
       const prediction = intercept + coef_hours * hours + coef_prev * prev;
       document.getElementById('result').innerText = `Predicted Final Grade: ${prediction.toFixed(2)}`;
     }
   </script>
 </body>
 </html>
+
 
